@@ -1,9 +1,7 @@
-# app/logs.py
 from flask import Blueprint, request, jsonify
 from app.db import logs_collection
 from datetime import datetime
 
-# Blueprint cho logs
 log_routes = Blueprint('log_routes', __name__)
 
 def log_event_status(status, message, api_key, log_type="api"):
@@ -11,14 +9,13 @@ def log_event_status(status, message, api_key, log_type="api"):
     Ghi lại sự kiện log vào MongoDB
     """
     log_entry = {
-        "status": status,  # 'success', 'failure', v.v.
-        "message": message,  # Mô tả chi tiết về sự kiện
-        "timestamp": datetime.now(),  # Thời gian ghi log
-        "api_key_used": api_key,  # API key đã sử dụng
-        "type": log_type  # 'api' cho logs API, 'webhook' cho logs webhook
+        "status": status,  
+        "message": message,  
+        "timestamp": datetime.now(), 
+        "api_key_used": api_key, 
+        "type": log_type 
     }
     
-    # Insert log vào MongoDB
     logs_collection.insert_one(log_entry)
 
 @log_routes.route('/', methods=['GET'])
@@ -43,11 +40,12 @@ def get_api_logs():
     status = request.args.get('status', None)
     role = request.args.get('role', None)
     
-    query = {}
+    query = {"type": "api"} 
+
     if status:
         query['status'] = status
     if role:
-        query['message'] = {"$regex": role}  # Giả sử role sẽ được chứa trong message (hoặc có thể cải tiến thêm)
+        query['message'] = {"$regex": role}  
     
     logs = list(logs_collection.find(query))
     if not logs:
@@ -68,7 +66,7 @@ def get_webhook_logs():
     if since:
         try:
             since_date = datetime.strptime(since, "%Y-%m-%d")
-            query['timestamp'] = {"$gte": since_date}  # Lọc logs từ ngày `since`
+            query['timestamp'] = {"$gte": since_date} 
         except ValueError:
             return jsonify({"message": "Invalid date format, please use YYYY-MM-DD"}), 400
 

@@ -1,48 +1,48 @@
 # API Key Management Service
 
-## 1. Cài đặt
+## 1. Installation
 
-### 1.1 Clone dự án về:
+### 1.1 Clone the Project:
 ```bash
 git clone https://github.com/khoilieu/intern-ass.git
 cd intern-ass
 ```
 
-### 1.2 Cài đặt các thư viện yêu cầu:
+### 1.2 Install Required Libraries:
 ```bash
-# Trên Linux/Mac
+# On Linux/Mac
 source venv/bin/activate
 
-# Trên Windows
+# On Windows
 .\venv\Scripts\activate
 ```
 
-### 1.3 Cài đặt và chạy MongoDB (Nếu sử dụng Docker):
-Nếu bạn chưa có MongoDB, hãy sử dụng Docker để khởi động MongoDB container:
+### 1.3 Install and Run MongoDB (Using Docker):
+If you don't have MongoDB, use Docker to start the MongoDB container:
 
-- Đảm bảo Docker đã được cài và chạy trên máy của bạn.
-- Trong thư mục chứa file `docker-compose.yml`, chạy lệnh:
+- Ensure Docker is installed and running on your machine.
+- In the directory containing the `docker-compose.yml` file, run the command:
   ```bash
   docker-compose up
   ```
-  Điều này sẽ khởi động MongoDB và kết nối với ứng dụng Flask.
+  This will start MongoDB and connect it to the Flask application.
 
-### 1.4 Chạy ứng dụng Flask:
-Sau khi MongoDB đã chạy, bạn có thể khởi động ứng dụng:
+### 1.4 Run the Flask Application:
+After MongoDB is running, you can start the application:
 
 ```bash
-# Sử dụng Docker
+# Using Docker
 docker-compose up
 
-# Hoặc chạy trực tiếp
+# Or run directly
 python app/main.py
 ```
 
-Flask sẽ chạy trên cổng `5000` (http://127.0.0.1:5000/).
+Flask will run on port `5000` (http://127.0.0.1:5000/).
 
-## 2. Các API cần test bằng Postman
+## 2. APIs to Test with Postman
 
-### 2.1 Tạo API key
+### 2.1 Generate API Key
 - **URL:** `http://127.0.0.1:5000/apikeys/generate`
 - **Method:** `POST`
 - **Body (JSON):**
@@ -52,9 +52,9 @@ Flask sẽ chạy trên cổng `5000` (http://127.0.0.1:5000/).
     "environment": "production"
   }
   ```
-- **Kiểm tra:** Sau khi tạo API key, thử gửi một yêu cầu POST đến `/webhook/trigger` với header `x-api-key` là API key vừa tạo.
+- **Verification:** After creating the API key, try sending a POST request to `/webhook/trigger` with the `x-api-key` header using the newly generated API key.
 
-### 2.2 Kiểm tra Compliance role không thể POST webhook
+### 2.2 Check Compliance Role Cannot POST Webhook
 - **URL:** `http://127.0.0.1:5000/webhook/trigger`
 - **Method:** `POST`
 - **Body (JSON):**
@@ -67,10 +67,10 @@ Flask sẽ chạy trên cổng `5000` (http://127.0.0.1:5000/).
     }
   }
   ```
-- **Header:** `x-api-key` là API key của role `compliance`
-- **Kiểm tra:** Bạn sẽ nhận được thông báo 403 Forbidden nếu dùng API key của role `compliance` để POST webhook.
+- **Header:** `x-api-key` is the API key of the `compliance` role
+- **Verification:** You will receive a 403 Forbidden message if using an API key with the `compliance` role to POST a webhook.
 
-### 2.3 Kiểm tra Logs được lưu với metadata chính xác
-- **URL:** `http://127.0.0.1:5000/logs`
+### 2.3 Check Logs Stored with Accurate Metadata
+- **URL:** `http://127.0.0.1:5000/logs` or `http://127.0.0.1:5000/logs/api` or `http://127.0.0.1:5000/logs/webhooks` or `http://127.0.0.1:5000/logs/api?status=success&role=developer`
 - **Method:** `GET`
-- **Kiểm tra:** Xem các logs đã được lưu vào MongoDB với metadata chính xác (status, timestamp, api_key_used) và có thể truy xuất qua endpoint này.
+- **Verification:** View logs stored in MongoDB with accurate metadata (status, timestamp, api_key_used) and accessible through this endpoint.
