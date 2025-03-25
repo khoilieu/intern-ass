@@ -37,7 +37,7 @@ def generate_api_key():
     api_keys_collection.insert_one(new_api_key)
 
     # Ghi log tạo API key
-    log_event_status("success", f"API key generated for {role} in {environment}", api_key)
+    log_event_status("success", f"API key generated for {role} in {environment}", api_key, log_type="api")
     
     return jsonify({
         "api_key": api_key,

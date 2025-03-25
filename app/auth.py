@@ -32,7 +32,7 @@ def check_role_access(api_key, requested_endpoint):
 
 def rbac_middleware():
     requested_endpoint = request.path
-    if requested_endpoint == '/apikeys/generate':
+    if requested_endpoint == '/apikeys/generate' or requested_endpoint == '/logs':
         return None  # Bỏ qua kiểm tra với API key trong trường hợp tạo API key
 
     api_key = request.headers.get('x-api-key')
