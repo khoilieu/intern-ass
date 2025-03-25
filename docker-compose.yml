@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: flask_app
+    ports:
+      - "5000:5000" # Mở cổng 5000 cho Flask
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - mongodb # Đảm bảo MongoDB đã khởi động trước
+
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - "27017:27017" # Mở cổng 27017 cho MongoDB
+    volumes:
+      - mongodb_data:/data/db # Lưu dữ liệu MongoDB vào volume
+
+volumes:
+  mongodb_data:
+    driver: local # Sử dụng volume local để lưu trữ dữ liệu MongoDB
